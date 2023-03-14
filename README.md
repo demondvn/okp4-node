@@ -12,7 +12,7 @@
     
     SNAP_NAME=$(curl -s https://snapshots1-testnet.nodejumper.io/okp4-testnet/info.json | jq -r .fileName) && \
     axel -an 10 "https://snapshots1-testnet.nodejumper.io/okp4-testnet/${SNAP_NAME}" 
-    lz4 -dc $SNAP_NAME | tar -xf $SNAP_NAME -C .
+    lz4 -dc $SNAP_NAME | tar -xf - -C .
     docker restart okp4
 ## Docs
 
