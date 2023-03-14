@@ -2,12 +2,17 @@
 ## Build
     docker build . -t okp4
 ## Run
-    docker run -e NODE_MONIKER="MonPham" -v /mnt/blockstore/opk4:/root/.okp4d --name okp4 okp4
+    docker run -d -e NODE_MONIKER="MonPham" -v /mnt/blockstore/opk4:/root/.okp4d --name okp4 --restart unless-stopped okp4
 
 ## Snapshot
-    docker exec -it okp4 /bin/bash -c '\
+    docker stop okp4
+
+    cd /mnt/blockstore/opk4
+
+    
     SNAP_NAME=$(curl -s https://snapshots1-testnet.nodejumper.io/okp4-testnet/info.json | jq -r .fileName) && \
-    curl "https://snapshots1-testnet.nodejumper.io/okp4-testnet/${SNAP_NAME}" | lz4 -dc - | tar -xf - -C "$HOME/.okp4d"'
+    axel -an 10 "https://snapshots1-testnet.nodejumper.io/okp4-testnet/${SNAP_NAME}" 
+    lz4 -dc $SNAP_NAME | tar -xf $SNAP_NAME -C .
     docker restart okp4
 ## Docs
 
